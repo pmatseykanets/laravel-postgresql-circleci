@@ -37,7 +37,7 @@ jobs:
             sudo -u root psql -h 127.0.0.1 -U postgres -c "create database homestead"
             sudo -u root psql -h 127.0.0.1 -U postgres -c "create user homestead password 'secret'"
             sudo -u root psql -h 127.0.0.1 -U postgres -c "grant all on database homestead to homestead"
-            sudo -u root psql -h 127.0.0.1 -U postgres homestead -c "create extension cvitext"
+            sudo -u root psql -h 127.0.0.1 -U postgres homestead -c "create extension citext"
       - run:
           name: Populate .env
           command: cp .env.example .env && php artisan key:generate
