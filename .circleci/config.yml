@@ -10,14 +10,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install client tools
+          name: Install PostgreSQL client tools
           command: |
-            sudo apt-get update
-            sudo apt-get install libpq-dev
-            sudo apt-get install postgresql-client
+            sudo apt-get update && sudo apt-get install postgresql-client
       - run:
           name: Install and enable pdo_pgsql php extension
-          command: sudo docker-php-ext-install pdo_pgsql && sudo docker-php-ext-enable pdo_pgsql
+          command: |
+            sudo apt-get update && sudo apt-get install libpq-dev
+            sudo docker-php-ext-install pdo_pgsql && sudo docker-php-ext-enable pdo_pgsql
       - run:
           name: Update composer
           command: sudo composer self-update
@@ -33,7 +33,7 @@ jobs:
           paths:
             - vendor
       - run:
-          name: Prep the database and user
+          name: Prep the database and user, install extensions etc.
           command: |
             sudo -u root psql -h 127.0.0.1 -U postgres -c "create database homestead"
             sudo -u root psql -h 127.0.0.1 -U postgres -c "create user homestead password 'secret'"
