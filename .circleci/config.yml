@@ -6,8 +6,6 @@ jobs:
       - image: postgres:9.6
         environment:
           - POSTGRES_USER=postgres
-          - POSTGRES_PASSWORD=secret
-          - POSTGRES_DB=postgres
     working_directory: ~/repo
     steps:
       - checkout
@@ -36,10 +34,10 @@ jobs:
       - run:
           name: Prep the database and user
           command: |
-            sudo -u ubuntu psql -c "create database homestead"
-            sudo -u ubuntu psql -c "create user homestead password 'secret'"
-            sudo -u ubuntu psql -c "grant all on database homestead to homestead"
-            sudo -u ubuntu psql homestead -c "create extension cvitext"
+            sudo -u root psql -h 127.0.0.1 -U postgres -c "create database homestead"
+            sudo -u root psql -h 127.0.0.1 -U postgres -c "create user homestead password 'secret'"
+            sudo -u root psql -h 127.0.0.1 -U postgres -c "grant all on database homestead to homestead"
+            sudo -u root psql -h 127.0.0.1 -U postgres homestead -c "create extension cvitext"
       - run:
           name: Populate .env
           command: cp .env.example .env && php artisan key:generate
