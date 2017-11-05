@@ -1,0 +1,55 @@
+version: 2
+jobs:
+  php71:
+    docker:
+      - image: circleci/php:7.1-browsers
+      - image: postgres:9.6
+        environment:
+          POSTGRES_ROOT_PASSWORD: secret
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install client tools
+          command: |
+            sudo apt-get update
+            sudo apt-get install postgresql-client
+#      - run:
+#          name: Install and enable pdo_pgsql php extension
+#          command: sudo docker-php-ext-install pdo_mysql && sudo docker-php-ext-enable pdo_mysql
+      - run:
+          name: Update composer
+          command: sudo composer self-update
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.json" }}
+            - composer-v1-
+      - run:
+          name: Install php dependencies
+          command: composer install -n --prefer-dist
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.json" }}
+          paths:
+            - vendor
+      - run:
+          name: Prep the database and user
+          command: |
+            sudo -su postgres psql -c "create database homestead"
+            sudo -su postgres psql -c "create user homestead password 'secret'"
+            sudo -su postgres psql -c "grant all on database homestead to homestead"
+            sudo -su postgres psql homestead -c "create extension cvitext"
+      - run:
+          name: Populate .env
+          command: cp .env.example .env && php artisan key:generate
+      - run:
+          name: Run database migrations
+          command: php artisan migrate --force
+      - run:
+          name: Run tests
+          command: ./vendor/bin/phpunit
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - php71
