@@ -14,9 +14,9 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install postgresql-client
-#      - run:
-#          name: Install and enable pdo_pgsql php extension
-#          command: sudo docker-php-ext-install pdo_mysql && sudo docker-php-ext-enable pdo_mysql
+      - run:
+          name: Install and enable pdo_pgsql php extension
+          command: sudo docker-php-ext-install pdo_pgsql && sudo docker-php-ext-enable pdo_pgsql
       - run:
           name: Update composer
           command: sudo composer self-update
