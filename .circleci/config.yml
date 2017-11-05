@@ -5,7 +5,7 @@ jobs:
       - image: circleci/php:7.1-browsers
       - image: postgres:9.6
         environment:
-          - POSTGRES_USER=ubuntu
+          - POSTGRES_USER=ubuntuw
 #          - POSTGRES_DB=postgres
     working_directory: ~/repo
     steps:
