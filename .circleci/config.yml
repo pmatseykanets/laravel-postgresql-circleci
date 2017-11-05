@@ -5,7 +5,8 @@ jobs:
       - image: circleci/php:7.1-browsers
       - image: postgres:9.6
         environment:
-          POSTGRES_ROOT_PASSWORD: secret
+          - POSTGRES_USER=postgres
+          - POSTGRES_DB=postgres
     working_directory: ~/repo
     steps:
       - checkout
