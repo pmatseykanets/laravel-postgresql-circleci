@@ -5,8 +5,8 @@ jobs:
       - image: circleci/php:7.1-browsers
       - image: postgres:9.6
         environment:
-          - POSTGRES_USER=postgres
-          - POSTGRES_DB=postgres
+          - POSTGRES_USER=ubuntu
+#          - POSTGRES_DB=postgres
     working_directory: ~/repo
     steps:
       - checkout
@@ -35,10 +35,10 @@ jobs:
       - run:
           name: Prep the database and user
           command: |
-            sudo -su postgres psql -c "create database homestead"
-            sudo -su postgres psql -c "create user homestead password 'secret'"
-            sudo -su postgres psql -c "grant all on database homestead to homestead"
-            sudo -su postgres psql homestead -c "create extension cvitext"
+            sudo -su ubuntu psql -c "create database homestead"
+            sudo -su ubuntu psql -c "create user homestead password 'secret'"
+            sudo -su ubuntu psql -c "grant all on database homestead to homestead"
+            sudo -su ubuntu psql homestead -c "create extension cvitext"
       - run:
           name: Populate .env
           command: cp .env.example .env && php artisan key:generate
